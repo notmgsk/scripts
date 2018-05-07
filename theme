@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# TODO Automatically find any emacs daemons, rather than specificy
+# them manually. Maybe should have all emacs sessions run in server
+# mode?
+
+# TODO Maybe light and dark emacstheme and Xtheme should be defined somewhere
+# globally, like ~/.profile.
+
+case $1 in
+    dark*)
+        emacstheme="solarized-dark"
+        Xtheme=".Xresources.dark"
+        ;;
+    light*)
+        emacstheme="solarized-light"
+        Xtheme=".Xresources.light"
+        ;;
+    *)
+        cat <<EOF 
+Usage: $0 {light|dark} 
+    Swap themes in st and emacs daemons.
+EOF
+        exit 1
+        ;;
+esac
+
+# Merge in Xresources theme, and tell emacs to load new theme.
+xrdb -merge "/home/mgsk/${Xtheme}"
+emacsclient --eval "(load-theme '${emacstheme} t) (sml/apply-theme 'respectful)"  > /dev/null
+emacsclient -s mail --eval "(load-theme '${emacstheme} t) (sml/apply-theme 'respectful)"  > /dev/null
+
+# Find all st processes, send the USR1 signal which tells them to
+# reload settings from xrdb.
+ps axf | egrep "[[:space:]]{1,}st" | awk '{print "kill -USR1 " $1}' | sh
