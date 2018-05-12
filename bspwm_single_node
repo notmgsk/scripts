@@ -15,7 +15,7 @@ pad_width=$(echo "($mon_width - $window_width)/2" | bc -l)
 mon_height=$(bspc query -T -m $target_mon | jq .rectangle.height)
 [ $mon_height -gt $mon_width ] && exit
 
-bspc subscribe node_{add,remove} desktop_{focus,layout} | while read nope; do
+bspc subscribe node_{add,remove,transfer} desktop_{focus,layout} | while read nope; do
     ! [ "$(bspc query -M -m --names)" = "$target_mon" ] && continue
     desk=$(bspc query -D -d)
 
