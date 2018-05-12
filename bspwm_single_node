@@ -23,7 +23,7 @@ bspc subscribe node_{add,remove,transfer} desktop_{focus,layout} | while read no
     monocle_layout=$(bspc query -T -d $desk | jq .layout | grep monocle)
     #    echo "$monocle_layout" > ~/test
     echo $node_count
-    if [ ! -z $monocle_layout ] || [ $node_count -eq 1 ]; then
+    if [ $node_count -eq 1 ] && [ -z $monocle_layout ]; then
         bspc config -d $desk left_padding  $pad_width
         bspc config -d $desk right_padding $pad_width
     else
