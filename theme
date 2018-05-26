@@ -9,11 +9,11 @@
 
 case $1 in
     dark*)
-        emacstheme="solarized-dark"
+        emacstheme="dark"
         Xtheme=".Xresources.dark"
         ;;
     light*)
-        emacstheme="solarized-light"
+        emacstheme="light"
         Xtheme=".Xresources.light"
         ;;
     *)
@@ -27,8 +27,8 @@ esac
 
 # Merge in Xresources theme, and tell emacs to load new theme.
 xrdb -merge "/home/mgsk/${Xtheme}"
-emacsclient --eval "(load-theme '${emacstheme} t) (sml/apply-theme 'respectful)"  > /dev/null
-emacsclient -s mail --eval "(load-theme '${emacstheme} t) (sml/apply-theme 'respectful)"  > /dev/null
+emacsclient --eval "(my/load-theme '${emacstheme})"  > /dev/null
+emacsclient -s mail --eval "(my/load-theme '${emacstheme})"  > /dev/null
 
 # Find all st processes, send the USR1 signal which tells them to
 # reload settings from xrdb.
